@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
-import 'package:sms/sms.dart';
+import 'package:permission_handler/permission_handler.dart';
+//import 'package:sms/sms.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,14 +36,18 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   List<String> recipents = ["11987213845", "11992545529"];
 
+  /*
   void _sendSMS(String message, String address) {
     SmsSender sender = new SmsSender();
     sender.sendSms(new SmsMessage(address, 'Hello flutter!'));
-  }
+  }*/
 
   void _sendFlutterSMS(String message, List<String> recipents) async {
-    String _result = await sendSMS(message: message, recipients: recipents)
-        .catchError((onError) {
+    await [Permission.camera, Permission.microphone, Permission.sms].request();
+
+    String _result =
+        await sendSMS(message: message, recipients: recipents, sendDirect: true)
+            .catchError((onError) {
       print(onError);
     });
     print(_result);
@@ -76,8 +81,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _sendSMS("Sms => ", "11987213845");
-          _sendFlutterSMS('FlutterSms =>', recipents);
+          //_sendSMS("Sms => ", "11987213845");
+          _sendFlutterSMS('FlutterSms agora vau =>', recipents);
           _incrementCounter();
         },
         tooltip: 'Increment',
