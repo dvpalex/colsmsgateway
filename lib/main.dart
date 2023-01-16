@@ -1,7 +1,9 @@
+import 'package:colsmsgateway/presentation/home/binding/homebinding.dart';
+import 'package:colsmsgateway/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-//import 'package:sms/sms.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,15 +12,17 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: 'Collabmo SMS Gateway App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Envio SMS'),
+      initialBinding: HomeBinding(),
+      initialRoute: AppRoutes.initialRoute,
+      getPages: AppRoutes.pages,
     );
   }
 }
@@ -35,12 +39,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   List<String> recipents = ["11987213845", "11992545529"];
-
-  /*
-  void _sendSMS(String message, String address) {
-    SmsSender sender = new SmsSender();
-    sender.sendSms(new SmsMessage(address, 'Hello flutter!'));
-  }*/
 
   void _sendFlutterSMS(String message, List<String> recipents) async {
     await [Permission.camera, Permission.microphone, Permission.sms].request();
