@@ -1,58 +1,44 @@
+import 'package:colsmsgateway/presentation/campaign/campaign_screen.dart';
+import 'package:colsmsgateway/presentation/dashboard/dashboard_screen.dart';
 import 'package:colsmsgateway/presentation/home/controller/homecontroller.dart';
+import 'package:colsmsgateway/presentation/setup/setup_screen.dart';
+import 'package:colsmsgateway/presentation/sidebar/sidebar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends GetView<HomeController> {
+  final List<Widget> _screens = [
+    DashboardScreen(),
+    CampaignScreen(),
+    SetupScreen()
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            body: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 12),
-          child: Container(
-            alignment: Alignment.center,
-            width: double.infinity,
-            decoration: new BoxDecoration(),
-            child: Obx(() => Text(
-                  "SMS GATEWAY : ${controller.deviceId}",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: Colors.amber[800],
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                )),
-          ),
-        ),
-        SizedBox(
-          height: 12,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Container(
-                alignment: Alignment.center,
-                width: 200,
-                height: 200,
-                decoration: new BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: new BorderRadius.circular(16.0),
-                ),
-                child: Obx(() => Text(
-                      "${controller.totalsend}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 64,
-                          color: Colors.white70),
-                    )),
+            drawer: const SideBarScreen(),
+            appBar: AppBar(
+              backgroundColor: Colors.lightGreen,
+              elevation: 0,
+              title: Text(
+                "COLLABMO SMS GATEWAY",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-          ],
-        ),
-      ],
-    )));
+            bottomNavigationBar: Obx(() => BottomNavigationBar(
+                  onTap: controller.changeBottomBarIndex,
+                  currentIndex: controller.bottomBarIndex.value,
+                  items: [
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.home), label: "Home"),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.album_sharp), label: "Campanhas"),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.settings_suggest), label: "Setup"),
+                  ],
+                )),
+            body: Obx(() => _screens[controller.bottomBarIndex.value])));
   }
 }

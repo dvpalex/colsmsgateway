@@ -6,20 +6,11 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class HomeController extends GetxController {
-  final totalsend = 0.obs;
   final deviceId = "".obs;
+  final bottomBarIndex = 0.obs;
 
-  void _sendFlutterSMS(String message, List<String> recipents) async {
-    await [Permission.camera, Permission.microphone, Permission.sms].request();
-
-    String _result =
-        await sendSMS(message: message, recipients: recipents, sendDirect: true)
-            .catchError((onError) {
-      print(onError);
-
-      totalsend.value = totalsend.value + 1;
-    });
-    print(_result);
+  void changeBottomBarIndex(int index) {
+    bottomBarIndex.value = index;
   }
 
   @override
